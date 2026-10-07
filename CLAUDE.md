@@ -18,7 +18,7 @@ Flujo de datos:
 - `src/pages/index.astro` es la única página: lee el manifiesto, pinta las miniaturas y los botones de filtro (por `group`) y, con un script inline, abre la imagen completa en un `<dialog>` de daisyUI (se navega con ❮ ❯ o las flechas del teclado, respetando el filtro activo).
 - daisyUI se carga como `@plugin` en `src/styles/global.css` (temas light/dark). El título usa el color de marca `#E25200`.
 - `pnpm-workspace.yaml` contiene `allowBuilds` para esbuild y sharp (pnpm 11 bloquea los scripts de instalación si no se autorizan).
-- Los videos `.mp4` todavía no se usan en el sitio.
+- Los videos del sitio están en `public/videos/` (`<slug>.mp4` H.264 ≤1920 px, CRF 24, `+faststart`, y `<slug>-poster.jpg`), generados a mano con ffmpeg desde `src/*.mp4` (ignorados en git por pesar >100 MB). La lista está en `videos` en `index.astro`. Los `.mp4` de `fotos portafolio ags bhp/` aún no se usan.
 
 ## Material fuente: `fotos portafolio ags bhp/`
 

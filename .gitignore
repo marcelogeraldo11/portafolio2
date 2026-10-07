@@ -6,3 +6,6 @@ dist/
 fotos portafolio ags bhp/
 .vercel
 .env*
+
+# Videos fuente (>100 MB); se publican los derivados de public/videos/
+src/*.mp4

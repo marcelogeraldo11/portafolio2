@@ -6,6 +6,13 @@ import logoAgs from '../LOGOTIPO AGS-2.png';
 
 const groups = [...new Set(images.map((img) => img.group))];
 const title = 'Repositorio MEL BHP';
+
+// Derivados web de los videos fuente (src/*.mp4), generados con ffmpeg en public/videos/.
+const videos = [
+  { slug: 'corporativo', title: 'Corporativo', vertical: false },
+  { slug: 'novandino', title: 'NovAndino', vertical: true },
+  { slug: 'tgnmeji-final', title: 'TGN', vertical: true },
+];
 ---
 
 <html lang="es">
@@ -26,6 +33,28 @@ const title = 'Repositorio MEL BHP';
     </header>
 
     <main class="mx-auto max-w-7xl px-4 pb-16">
+      <section class="mb-12">
+        <h2 class="mb-4 text-2xl font-bold text-[#E25200]">Videos</h2>
+        <div class="flex flex-wrap items-start justify-center gap-4">
+          {
+            videos.map((v) => (
+              <figure class={v.vertical ? 'w-full max-w-xs' : 'w-full lg:max-w-3xl'}>
+                <video
+                  src={`/videos/${v.slug}.mp4`}
+                  poster={`/videos/${v.slug}-poster.jpg`}
+                  controls
+                  playsinline
+                  preload="none"
+                  class={`w-full rounded-box bg-black shadow-sm ${v.vertical ? 'aspect-[9/16]' : 'aspect-video'}`}
+                />
+                <figcaption class="mt-2 text-center text-sm text-white/70">{v.title}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </section>
+
+      <h2 class="mb-4 text-2xl font-bold text-[#E25200]">Fotografías</h2>
       <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
         {
           images.map((img, i) => (
