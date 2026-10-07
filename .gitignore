@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+# Material fuente original (~7 GB); las versiones WebP están en public/images
+fotos portafolio ags bhp/

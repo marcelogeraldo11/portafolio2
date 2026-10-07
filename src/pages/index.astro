@@ -1,0 +1,123 @@
+---
+import '../styles/global.css';
+import { Image } from 'astro:assets';
+import images from '../data/images.json';
+import logoAgs from '../LOGOTIPO AGS-2.png';
+
+const groups = [...new Set(images.map((img) => img.group))];
+const title = 'Portafolio MEL BHP';
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen bg-[#00273F] text-white">
+    <header class="px-4 pt-12 pb-6 text-center">
+      <h1 class="text-4xl font-bold tracking-tight text-[#E25200] sm:text-6xl">{title}</h1>
+      <p class="mt-3 text-white/70">{images.length} imágenes</p>
+
+      <div class="mt-6 flex flex-wrap justify-center gap-2" id="filters">
+        <button class="btn btn-sm btn-active" data-filter="all">Todas</button>
+        {groups.map((g) => <button class="btn btn-sm" data-filter={g}>{g}</button>)}
+      </div>
+    </header>
+
+    <main class="mx-auto max-w-7xl px-4 pb-16">
+      <ul class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+        {
+          images.map((img, i) => (
+            <li data-group={img.group}>
+              <button
+                class="group relative block aspect-[4/3] w-full overflow-hidden rounded-box bg-white/5 shadow-sm"
+                data-index={i}
+                aria-label={`Ver ${img.group} ${img.name}`}
+              >
+                <img
+                  src={img.thumb}
+                  width={img.width}
+                  height={img.height}
+                  alt={`${img.group} – ${img.category} – ${img.name}`}
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                />
+                <span class="badge badge-sm absolute bottom-2 left-2 border-0 bg-black/60 text-white">
+                  {img.group}
+                </span>
+              </button>
+            </li>
+          ))
+        }
+      </ul>
+    </main>
+
+    <footer class="flex flex-col items-center gap-4 border-t border-white/10 px-4 py-10 text-center">
+      <Image src={logoAgs} alt="AGS – Soluciones Industriales Aéreas" width={360} class="h-auto w-64 sm:w-80" />
+      <p class="text-sm text-white/70">© {new Date().getFullYear()} AGS · Soluciones Industriales Aéreas</p>
+    </footer>
+
+    <dialog id="lightbox" class="modal">
+      <div class="modal-box flex max-h-[95vh] w-11/12 max-w-6xl flex-col items-center gap-3 bg-base-100 p-3">
+        <img id="lightbox-img" class="max-h-[80vh] w-auto rounded-box object-contain" alt="" />
+        <div class="flex w-full items-center justify-between gap-2">
+          <button class="btn btn-circle btn-sm" id="prev" aria-label="Anterior">❮</button>
+          <p id="lightbox-caption" class="text-center text-sm text-base-content/70"></p>
+          <button class="btn btn-circle btn-sm" id="next" aria-label="Siguiente">❯</button>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop"><button>cerrar</button></form>
+    </dialog>
+
+    <script is:inline define:vars={{ images }}>
+      const dialog = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lightbox-img');
+      const caption = document.getElementById('lightbox-caption');
+      const items = [...document.querySelectorAll('li[data-group]')];
+      let current = 0;
+
+      // Índices visibles según el filtro activo, para que ❮ ❯ respeten el filtro.
+      const visible = () =>
+        items.filter((li) => !li.hidden).map((li) => Number(li.querySelector('button').dataset.index));
+
+      function show(i) {
+        current = i;
+        const img = images[i];
+        lbImg.src = img.src;
+        lbImg.alt = `${img.group} – ${img.name}`;
+        caption.textContent = [img.section, img.group, img.category, img.name].filter(Boolean).join(' · ');
+      }
+
+      function step(delta) {
+        const list = visible();
+        const pos = list.indexOf(current);
+        show(list[(pos + delta + list.length) % list.length]);
+      }
+
+      document.querySelectorAll('button[data-index]').forEach((btn) =>
+        btn.addEventListener('click', () => {
+          show(Number(btn.dataset.index));
+          dialog.showModal();
+        }),
+      );
+      document.getElementById('prev').addEventListener('click', () => step(-1));
+      document.getElementById('next').addEventListener('click', () => step(1));
+      document.addEventListener('keydown', (e) => {
+        if (!dialog.open) return;
+        if (e.key === 'ArrowLeft') step(-1);
+        if (e.key === 'ArrowRight') step(1);
+      });
+
+      document.querySelectorAll('#filters button').forEach((btn) =>
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('#filters button').forEach((b) => b.classList.remove('btn-active'));
+          btn.classList.add('btn-active');
+          const f = btn.dataset.filter;
+          items.forEach((li) => (li.hidden = f !== 'all' && li.dataset.group !== f));
+        }),
+      );
+    </script>
+  </body>
+</html>
