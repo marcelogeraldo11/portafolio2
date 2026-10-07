@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Proyecto
 
-Sitio estático en Astro (pnpm + Tailwind 4 + daisyUI 5) que muestra las fotos del portafolio "Portafolio MEL BHP" en una cuadrícula con filtros por proyecto y un visor modal. No hay lint ni tests.
+Sitio estático en Astro (pnpm + Tailwind 4 + daisyUI 5) que muestra las fotos del sitio "Repositorio MEL BHP" en una cuadrícula con filtros por proyecto y un visor modal. No hay lint ni tests.
 
 ```sh
 pnpm install
